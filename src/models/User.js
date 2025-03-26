@@ -20,6 +20,26 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  created_at: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
 }, {
   tableName: "all_user", // Match with your existing table name
   timestamps: false,
