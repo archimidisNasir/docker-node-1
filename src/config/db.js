@@ -26,4 +26,3 @@ const sequelize = new Sequelize("userdb", "user", "userpassword", {
 });
 
 export default sequelize;
-

@@ -1,5 +1,9 @@
-import { DataTypes } from "sequelize";
+import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+
+// const { Sequelize, DataTypes } = require("sequelize"); // ✅ Ensure Sequelize is imported
+// const sequelize = require("../config/db"); // ✅ Your database connection
+
 
 const User = sequelize.define("User", {
   id: {
@@ -35,11 +39,12 @@ const User = sequelize.define("User", {
     defaultValue: "user",
   },
   created_at: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: Sequelize.NOW,
   },
 }, {
-  tableName: "all_user", // Match with your existing table name
+  tableName: "all_user",
   timestamps: false,
 });
 

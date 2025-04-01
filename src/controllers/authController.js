@@ -11,9 +11,10 @@ import authController from "../controllers/authController.js";
 
 export const updateProfile = async (req, res) => {
     try {
-      const { username, name, old_password, new_password, phone, address } = req.body;
+      const { username, name, old_password, new_password, phone, address, role } = req.body;
       const requestingUserId = req.user.id; // Extracted from JWT middleware
       const requestingUserRole = req.user.role; // Assuming role is stored in JWT
+      
   
       let targetUser;
   
@@ -31,6 +32,14 @@ export const updateProfile = async (req, res) => {
       if (!targetUser) {
         return res.status(404).json({ message: "User not found" });
       }
+
+
+      if (role) {
+        if (requestingUserRole !== "admin") {
+          return res.status(403).json({ message: "Permission denied. Only admin can update roles." });
+        }
+        targetUser.role = role;
+      }
   
       let passwordUpdated = false;
   
@@ -44,10 +53,16 @@ export const updateProfile = async (req, res) => {
       if (address) {
         targetUser.address = address;
       }
-  
-      // Check if user wants to change password
-      if (old_password && new_password) {
-        const passwordMatch = await bcrypt.compare(old_password, targetUser.password);
+        // Check if user wants to change password
+      if (new_password) {
+        let passwordMatch = false;
+
+        if (requestingUserRole === "admin") {
+          passwordMatch = true;
+        } else if (old_password) {
+          passwordMatch = await bcrypt.compare(old_password, targetUser.password);
+        }
+
         if (passwordMatch) {
           targetUser.password = await bcrypt.hash(new_password, 10);
           passwordUpdated = true;
@@ -55,7 +70,8 @@ export const updateProfile = async (req, res) => {
           console.warn(`User ${targetUser.id}: Old password incorrect, not updating password.`);
         }
       }
-  
+
+      
       // Save the updated user data
       await targetUser.save();
   
@@ -67,6 +83,7 @@ export const updateProfile = async (req, res) => {
       });
     } catch (error) {
       console.error("Update Profile Error:", error);
+      // return res.status(403).json({ message: "role missing......" });
       res.status(500).json({ message: "Internal server error" });
     }
   };  
@@ -115,6 +132,29 @@ export const profileView = async (req, res) => {
 
 
 export const signup = async (req, res) => {
+  try {
+    const { name, username, password, address, phone } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+
+    const newUser = await User.create({
+      name,
+      username,
+      password: hashedPassword,
+      address,
+      phone,
+    });
+
+    res.status(201).json({ message: "User registered successfully!", user: newUser });
+  } catch (error) {
+    console.error("Signup Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+export const signup_xx = async (req, res) => {
   try {
     const { name, username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
