@@ -73,53 +73,6 @@ export const updateProfile = async (req, res) => {
 
 
 
-export const updateProfile_xx = async (req, res) => {
-  try {
-      const { name, old_password, new_password } = req.body;
-      const userId = req.user.id; // Extracted from JWT middleware
-
-      // Find user
-      const user = await User.findByPk(userId);
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
-
-      let passwordUpdated = false;
-
-      // Update name if provided
-      if (name) {
-          user.name = name;
-      }
-
-      // Check if user wants to change password
-      if (old_password && new_password) {
-          const passwordMatch = await bcrypt.compare(old_password, user.password);
-          if (passwordMatch) {
-              const hashedPassword = await bcrypt.hash(new_password, 10);
-              user.password = hashedPassword;
-              passwordUpdated = true;
-          } else {
-              console.warn(`User ${userId}: Old password incorrect, not updating password.`);
-          }
-      }
-
-      // Save the updated user data
-      await user.save();
-
-      res.json({
-          message: passwordUpdated
-              ? "Profile updated successfully, password changed."
-              : "Profile updated successfully, but password was not changed.",
-          user,
-      });
-  } catch (error) {
-      console.error("Update Profile Error:", error);
-      res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-
-
 export const getAllUsers = async (req, res) => {
     try {
         // Check if the logged-in user is 'ranak'

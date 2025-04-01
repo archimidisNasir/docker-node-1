@@ -28,17 +28,15 @@ const User = sequelize.define("User", {
   address: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   role: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    defaultValue: "user",
   },
   created_at: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
 }, {
   tableName: "all_user", // Match with your existing table name
