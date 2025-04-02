@@ -1,11 +1,11 @@
-import db from "../config/db.js";
+// import db from "../config/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
 // import { User } from "../models/userModel.js"; // Adjust the import based on your ORM setup
-import authController from "../controllers/authController.js";
+// import authController from "../controllers/authController.js";
 
 
 
@@ -198,7 +198,4 @@ export const signin = async (req, res) => {
 
 
 
-// ✅ Export as an object so it can be imported as `default`
-// export default { signup };
 export default { signup, signin, profileView, updateProfile };
-

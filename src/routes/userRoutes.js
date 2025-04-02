@@ -10,9 +10,6 @@ router.get('/test', (req, res) => {
 });
 
 
-
-// Protected Route: Only Admins can access
 router.get('/users', authMiddleware, authorizeRoles("admin"), getAllUsers);
 
-// export default router;
 module.exports = router;

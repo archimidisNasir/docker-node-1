@@ -1,10 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-// const { Sequelize, DataTypes } = require("sequelize"); // ✅ Ensure Sequelize is imported
-// const sequelize = require("../config/db"); // ✅ Your database connection
-
-
 const User = sequelize.define("User", {
   id: {
     type: DataTypes.INTEGER,
